@@ -5118,8 +5118,37 @@ var peckerwood = function(R) {
                 data: function(e) {
                     try {
                         var t = e.response;
-                        if(window.beginCJ){
+                        try {
+                            if(window.beginCJ){
                             console.log('t---->',t);
+                            let noPayOrders  =JSON.parse(localStorage.getItem('noPayOrders'))
+                            let curOrders = t?.result?.listRespDTOList.map(item=>{
+                                return {
+                                    order_id: item.order_id,
+                                    shop_name: item.shop_name,
+                                    shop_id: item.shop_id,
+                                    status_desc: item.status_desc,
+                                    sub_orders:item.sub_orders.map(subItem=>{
+                                        return {
+                                            item_id:item.item_id,
+                                            item_sku_title:item.item_sku_title,
+                                            item_title:item.item_title,
+                                            price:item.price,
+                                            quantity:item.quantity,
+                                            sub_order_desc:item.sub_order_desc,
+                                            sub_order_extend:item.sub_order_extend,
+                                            tips:item.tips,
+                                        }
+                                    }),
+                                    'zdcjTime采集时间': new Date().toLocaleDateString()+' '+new Date().toLocaleTimeString()
+                            
+                                }
+                            })
+                            noPayOrders = noPayOrders.concat(curOrders);
+                            localStorage.setItem('noPayOrders', JSON.stringify(noPayOrders))
+                        }
+                        } catch (error) {
+                            console.log('采集失败，请检查',error)
                         }
                         return t = "json" === e.responseType || g(t) ? t : he(e.responseText)
                     } catch (e) {
