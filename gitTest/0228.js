@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["app"], {
+
     0: function(e, t, n) {
         e.exports = n("56d7")
     },
